@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="firestore.css">
+    <title>Firestore DB</title>
+</head>
+<body>
+
+    <form>
+        <div class="container">
+            <h1>Register</h1>
+            <p>Please fill this form to register user.</p>
+            <br>
+
+            <label><b>UserName</b></label>
+            <input type="text" placeholder="Enter username" name="userName" id="userName" required>
+
+            <label><b>Email</b></label>
+            <input type="email" placeholder="Enter Email" name="email" id="email" required />
+
+            <label><b>Address</b></label>
+            <input type="text" placeholder="Enter address" name="address" id="address" required>
+
+            <label><b>Age</b></label>
+            <input type="text" placeholder="Age" name="age" id="age" required> 
+
+            <label><b>Contact</b></label>
+            <input type="text" placeholder="Enter contact" name="contact" id="contact" required>
+
+            <label><b>Password</b></label>
+            <input type="password" placeholder="Enter password" name="password" id="password" required>
+
+            <label><b>Confirm Password</b></label>
+            <input type="password" placeholder="Confirm password" name="confirmPassword" id="confirmPassword" required>
+
+            <br>
+            <button type="button" id="submitData" class="registerbtn">Register</button>
+        </div>
+
+        <div class="container signup">
+            <p>Already have an account? <a href="../login.html">Login</a></p>
+        </div>
+    </form>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyCWpArY3NEFkSuiXt57uJyBlj_jn-WuYV8",
+            authDomain: "auth-app-ed97f.firebaseapp.com",
+            projectId: "auth-app-ed97f",
+            storageBucket: "auth-app-ed97f.appspot.com",
+            messagingSenderId: "751615460543",
+            appId: "1:751615460543:web:e174e76e7c35fa57fbb20a",
+            measurementId: "G-0PL8E1NB4S"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        // Initialize Cloud Firestore and get a reference to the service
+        const db = getFirestore(app);
+
+        const submitData = document.getElementById('submitData');
+
+        submitData.addEventListener('click', () => {
+            const userName = document.getElementById('userName').value;
+            const email = document.getElementById('email').value;
+            const address = document.getElementById('address').value;
+            const age = document.getElementById('age').value;
+            const contact = document.getElementById('contact').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            // Basic form validation
+            if (password !== confirmPassword) {
+                alert('Password and Confirm Password do not match');
+                return;
+            }
+
+            addDoc(collection(db, "users"), {
+                userName: userName,
+                email: email,
+                address: address,
+                age: age,
+                contact: contact,
+                password: password,
+            })
+            .then(() => {
+                alert('User added successfully!');
+            })
+            .catch((error) => {
+                console.error('Error adding user: ', error);
+                alert('Error adding user. Check the console for details.');
+            });
+        });
+    </script>
+</body>
+</html>

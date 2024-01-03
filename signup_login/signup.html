@@ -1,0 +1,57 @@
+;<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="./style.css">
+    <title>Signup</title>
+  </head>
+  <body>
+    <label for="email">Email</label
+    ><input type="email" name="email" id="email" autocomplete="off" />
+    <label for="password">Password</label
+    ><input type="password" name="password" id="password" autocomplete="off" />
+
+    <button id="logIn">Signup</button>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCWpArY3NEFkSuiXt57uJyBlj_jn-WuYV8",
+        authDomain: "auth-app-ed97f.firebaseapp.com",
+        projectId: "auth-app-ed97f",
+        storageBucket: "auth-app-ed97f.appspot.com",
+        messagingSenderId: "751615460543",
+        appId: "1:751615460543:web:e174e76e7c35fa57fbb20a",
+        measurementId: "G-0PL8E1NB4S",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      // const email = document.getElementById('email').value;
+      // const password = document.getElementById('password').value;
+
+      // Fix: Move the script to the end of the body or use the 'defer' attribute
+      document.getElementById("logIn").addEventListener("click", () => {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+
+        createUserWithEmailAndPassword(auth, email, password)
+          .then((userCredential) => {
+            const user = userCredential.user;
+            alert("Signup: " + user.email);
+          })
+          .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            alert("Error: " + errorMessage);
+          });
+      });
+    </script>
+  </body>
+</html>
