@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD-Operation</title>
+    <link rel="stylesheet" href="localstorage.css">
+</head>
+<body>
+    <fieldset>
+        <legend>
+            <h2>Form</h2>
+        </legend>
+        <form id="form">
+            <input type="text" placeholder="Enter userName" name="userName" id="userName"><br><br>
+            <input type="email" placeholder="Enter Email" name="email" id="email"><br><br>
+            <input type="text" placeholder="Enter address" name="address" id="address"><br><br>
+            <input type="text" placeholder="Enter contact" name="contact" id="contact"><br><br>
+            <input type="password" placeholder="Enter password" name="password" id="password"><br><br>
+            <input type="password" placeholder="Confirm password" name="confirmPassword" id="confirmPassword"><br><br>
+            <input type="button" value="Submit" id="btn" onclick="Submit()">
+            <input type="reset" value="reset">
+        </form>
+    </fieldset>
+
+    <br>
+    <div id="msg"></div><br>
+
+    <fieldset>
+        <legend>
+            <h2>Data From Local Storage</h2>
+        </legend>
+        <table border="1" id="table">
+            <tr>
+                <td class="col">UserName</td>
+                <td class="col">Email</td>
+                <td class="col">Address</td>
+                <td class="col">Contact</td>
+                <!-- <td class="col">Password</td> -->
+                <td class="col">Action</td>
+            </tr>
+        </table>
+    </fieldset>
+    <script src="localstorage.js"></script>
+</body>
+</html>

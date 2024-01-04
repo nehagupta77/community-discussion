@@ -1,0 +1,23 @@
+body{
+    background-color: burlywood;
+    color: black;
+}
+table{
+    border-color: black;
+}
+td{
+    padding: 8px 16px;
+}
+.col{
+    font-size: 18px;
+    font-weight: bold;
+    background-color: red;
+}
+tr{
+    background-color: aquamarine;
+    color: black;
+    text-align: center;
+}
+input{
+    font-size: 16px;
+}
