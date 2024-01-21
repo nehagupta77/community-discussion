@@ -1,24 +1,74 @@
-;<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="./style.css" />
     <title>Signup</title>
   </head>
-  <body>
-    <label for="email">Email</label
-    ><input type="email" name="email" id="email" autocomplete="off" />
-    <label for="password">Password</label
-    ><input type="password" name="password" id="password" autocomplete="off" />
+  <body
+    style="
+      background: url('https://img.freepik.com/free-photo/abstract-digital-grid-black-background_53876-97647.jpg?w=740&t=st=1704647136~exp=1704647736~hmac=dbca5f969ab4474f6422e3b134c25f515b052024e18aed249510196022f24fb9')
+        no-repeat center center fixed;
+      background-size: cover;
+    "
+  >
+    <section>
+      <div class="login-box">
+        <form action="" id="signUpform">
+          <h2>Signup</h2>
+          <div class="input-box">
+            <input type="email" id="email" placeholder="Email" required />
+          </div>
 
-    <button id="logIn">Signup</button>
+           
+          <div class="input-box">
+            <span class="icon"
+              ><ion-icon name="lock-closed-outline"></ion-icon
+            ></span>
+            <input
+              type="password"
+              id="password"
+              placeholder="Password"
+              required
+            />
+          </div>
+          <button id="signUp" type="button" class="login-signup-btn">Signup</button>
+        </form>
+        <span class="alreadyAcc">Already account ? <a href="../signup_login/login.html">Login</a></span>
+        
+      </div>
+      
+    </section>
+
+    <script
+      type="module"
+      src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"
+    ></script>
+    <script
+      type="module"
+      src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"
+    ></script>
+    <script
+      nomodule
+      src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js"
+    ></script>
+    <script
+      nomodule
+      src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js"
+    ></script>
+
     <script type="module">
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
       import {
         getAuth,
         createUserWithEmailAndPassword,
       } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+      import {
+        getFirestore,
+        collection,
+        addDoc,
+      } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
       const firebaseConfig = {
         apiKey: "AIzaSyCWpArY3NEFkSuiXt57uJyBlj_jn-WuYV8",
@@ -32,19 +82,23 @@
 
       const app = initializeApp(firebaseConfig);
       const auth = getAuth(app);
+      const db = getFirestore(app);
 
-      // const email = document.getElementById('email').value;
-      // const password = document.getElementById('password').value;
-
-      // Fix: Move the script to the end of the body or use the 'defer' attribute
-      document.getElementById("logIn").addEventListener("click", () => {
+      document.getElementById("signUp").addEventListener("click", () => {
         const email = document.getElementById("email").value;
         const password = document.getElementById("password").value;
-
         createUserWithEmailAndPassword(auth, email, password)
           .then((userCredential) => {
             const user = userCredential.user;
+            addDoc(collection(db, "user"), {email:email, pass:password})
+              .then((response) => {
+                console.log("user created");
+              })
+              .catch((error) => {
+                console.log("error", error.message);
+              });
             alert("Signup: " + user.email);
+
           })
           .catch((error) => {
             const errorCode = error.code;

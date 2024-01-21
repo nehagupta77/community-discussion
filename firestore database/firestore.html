@@ -3,102 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="firestore.css">
     <title>Firestore DB</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            /* background-color: #fff; */
+            padding: 30px;
+            margin: 50px auto;
+            width: 60%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        p {
+            text-align: center;
+            color: #555;
+        }
+
+        form {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            color: #333;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 12px;
+            margin: 6px 0;
+            display: inline-block;
+            border: 1px solid #cccccc11;
+            box-sizing: border-box;
+            border-radius: 4px;
+        }
+
+        input[type="file"] {
+            margin-top: 10px;
+        }
+
+        hr {
+            border: 0;
+            height: 1px;
+            background: #ccc;
+            margin: 20px 0;
+        }
+
+        button {
+            background-color: blue;
+            color: white;
+            padding: 14px 20px;
+            margin: 8px 0;
+            border: none;
+            cursor: pointer;
+            width: 100%;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            opacity: 0.8;
+        }
+
+        .radio-btn {
+            display: flex;
+            flex-direction: row;
+            font-size: 16px;
+            font-weight: 400;
+            font: bold;
+        }
+
+    </style>
 </head>
-<body>
+<body background="https://png.pngtree.com/thumb_back/fh260/background/20201026/pngtree-scene-with-geometrical-forms-the-poster-model-minimal-background-render-image_437743.jpg">
+    <div class="container">
+        <h1>User Registration Form</h1>
+        <p>Please fill in the form to register your details.</p>
+        <hr>
 
-    <form>
-        <div class="container">
-            <h1>Register</h1>
-            <p>Please fill this form to register user.</p>
-            <br>
+        <form id="dataform">
+            <label for="name"><b>FullName</b></label>
+            <input type="text" placeholder="Enter your name" name="name" id="name" required>
 
-            <label><b>UserName</b></label>
-            <input type="text" placeholder="Enter username" name="userName" id="userName" required>
+            <label for="age"><b>Age</b></label>
+            <input type="text" placeholder="Enter your age" name="age" id="age" required>
 
-            <label><b>Email</b></label>
-            <input type="email" placeholder="Enter Email" name="email" id="email" required />
+            <label for="email"><b>Email</b></label>
+            <input type="email" placeholder="Enter your email" name="email" id="email" required>
 
-            <label><b>Address</b></label>
-            <input type="text" placeholder="Enter address" name="address" id="address" required>
+            <label for="number"><b>Phone Number</b></label>
+            <input type="tel" placeholder="Enter your phone number" name="number" id="number" required>
 
-            <label><b>Age</b></label>
-            <input type="text" placeholder="Age" name="age" id="age" required> 
+            <label for="address"><b>Address</b></label>
+            <textarea placeholder="Enter your address" name="address" id="address" required></textarea>
 
-            <label><b>Contact</b></label>
-            <input type="text" placeholder="Enter contact" name="contact" id="contact" required>
+            <label for="country"><b>Country</b></label>
+            <select name="country" id="country" required>
+                <option value="" disabled selected>Select Country</option>
+                <option value="Nepal">Nepal</option>
+                <option value="India">India</option>
+                <option value="Pakistan">Pakistan</option>
+                <option value="Bhutan">Bhutan</option>
+                <option value="China">China</option>
+            </select>
 
-            <label><b>Password</b></label>
-            <input type="password" placeholder="Enter password" name="password" id="password" required>
+           <br><br><div class="radio-btn">
+                <input type="radio" name="gender" id="male">
+                <label for="male">Male</label>
 
-            <label><b>Confirm Password</b></label>
-            <input type="password" placeholder="Confirm password" name="confirmPassword" id="confirmPassword" required>
+                <input type="radio" name="gender" id="female">
+                <label for="female">Female</label>
 
-            <br>
-            <button type="button" id="submitData" class="registerbtn">Register</button>
-        </div>
+                <input type="radio" name="gender" id="other">
+                <label for="other">Other</label>
+            </div>
 
-        <div class="container signup">
-            <p>Already have an account? <a href="../login.html">Login</a></p>
-        </div>
-    </form>
+            <hr>
+            <button type="button" id="submitData" name="submitData" class="registerbtn">Register</button>
+        </form>
+    </div>
 
     <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, addDoc, collection } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-         
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        // Import the functions from firestore
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-app.js";
+        import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.6/firebase-firestore.js";
+
+
+        // Firebase configuration
+        
         const firebaseConfig = {
-            apiKey: "AIzaSyCWpArY3NEFkSuiXt57uJyBlj_jn-WuYV8",
-            authDomain: "auth-app-ed97f.firebaseapp.com",
-            projectId: "auth-app-ed97f",
-            storageBucket: "auth-app-ed97f.appspot.com",
-            messagingSenderId: "751615460543",
-            appId: "1:751615460543:web:e174e76e7c35fa57fbb20a",
-            measurementId: "G-0PL8E1NB4S"
+            apiKey: "your-api-key",
+            authDomain: "your-auth-domain",
+            projectId: "your-project-id",
+            storageBucket: "your-storage-bucket",
+            messagingSenderId: "your-messaging-sender-id",
+            appId: "your-app-id",
+            measurementId: "your-measurement-id"
         };
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  // Initialize Cloud Firestore and get a reference to the service
+  const db = getFirestore(app);
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        // Initialize Cloud Firestore and get a reference to the service
-        const db = getFirestore(app);
+  const submitData = document.getElementById('submitData');
 
-        const submitData = document.getElementById('submitData');
+  submitData.addEventListener('click', async () => {
+    try {
+      const FullName = document.getElementById('name').value;
+      const email = document.getElementById('email').value;
+      const address = document.getElementById('address').value;
+      const age = document.getElementById('age').value;
+      const number = document.getElementById('number').value;
+      const country = document.getElementById('country').value;
 
-        submitData.addEventListener('click', () => {
-            const userName = document.getElementById('userName').value;
-            const email = document.getElementById('email').value;
-            const address = document.getElementById('address').value;
-            const age = document.getElementById('age').value;
-            const contact = document.getElementById('contact').value;
-            const password = document.getElementById('password').value;
-            const confirmPassword = document.getElementById('confirmPassword').value;
+      // Checkbox example (assuming 'gender' is the name for all checkboxes)
+      const genderOptions = document.querySelectorAll('input[name="gender"]:checked');
+      const selectedGenders = Array.from(genderOptions).map(option => option.value);
 
-            // Basic form validation
-            if (password !== confirmPassword) {
-                alert('Password and Confirm Password do not match');
-                return;
-            }
+      const userDoc = {
+        FullName: FullName,
+        email: email,
+        address: address,
+        age: age,
+        number: number,
+        country: country,
+        gender: selectedGenders,
+      };
 
-            addDoc(collection(db, "users"), {
-                userName: userName,
-                email: email,
-                address: address,
-                age: age,
-                contact: contact,
-                password: password,
-            })
-            .then(() => {
-                alert('User added successfully!');
-            })
-            .catch((error) => {
-                console.error('Error adding user: ', error);
-                alert('Error adding user. Check the console for details.');
-            });
-        });
-    </script>
+      await addDoc(collection(db, "users"), userDoc);
+      alert('User added successfully!');
+    } catch (error) {
+      console.error('Error adding user: ', error);
+      alert('Error adding user. Check the console for details.');
+    }
+  });
+</script>
 </body>
 </html>
