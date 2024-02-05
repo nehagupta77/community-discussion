@@ -15,13 +15,13 @@
       <div class="wrapper">
         <section class="post">
           <header>Create Post</header>
-          <form action="#" method="post">
-            <div class="privacy" id="privacy">
-                <select name="privacy" id="privacy">
-                    <option value="friend">Public</option>
-                    <option value="friend">Friend</option>
-                    <option value="friend">Only me</option>
-                </select>
+          <form action="#" method="post" id="postForm">
+            <div class="privacy" id="privacyDiv">
+              <select name="privacy" id="privacySelect">
+                <option value="public">Public</option>
+                <option value="friend">Friend</option>
+                <option value="only-me">Only Me</option>
+              </select>
             </div>
             <textarea
               id="postText"
@@ -82,11 +82,15 @@
 
       const fileInput = document.getElementById("postFile");
       const postButton = document.getElementById("submit");
+      const postForm = document.getElementById("postForm");
 
       postButton.addEventListener("click", handleUpload);
 
       async function handleUpload() {
         const postText = document.getElementById("postText").value;
+        const privacySelect = document.getElementById("privacySelect");
+        const selectedPrivacy =
+          privacySelect.options[privacySelect.selectedIndex].value;
 
         const file = fileInput.files[0];
 
@@ -109,19 +113,16 @@
                 uploadTask.snapshot.ref
               );
 
-              // Save download URL in Firestore
+              // Save download URL and privacy in Firestore
               await addDoc(collection(firestore, "posts"), {
                 text: postText,
                 imageUrl: downloadURL,
                 timestamp: new Date(),
+                privacy: selectedPrivacy,
               });
 
-              alert("Posted")
-
-              console.log(
-                "Image uploaded and URL saved in Firestore:",
-                downloadURL
-              );
+              alert("Posted");
+              postForm.reset();
             }
           );
         } else {
