@@ -1,0 +1,172 @@
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(#00c6ff, #0078ff);
+}
+
+.container {
+  width: 500px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+
+.post header {
+  font-size: 22px;
+  font-weight: 600;
+  text-align: center;
+  padding: 17px 0;
+  border-bottom: 1px solid #bfbfbf;
+}
+
+.privacy {
+  display: flex;
+  max-width: 98px;
+  cursor: pointer;
+  font-size: 11px;
+  background: #e4e6eb;
+  padding: 5px 10px;
+  border-radius: 5px;
+  justify-content: space-between;
+  margin-top: 3px;
+}
+
+.privacy span {
+  font-size: 13px;
+  margin-top: 1px;
+  font-weight: 500;
+}
+
+.post form textarea,
+.post form button {
+  width: 100%;
+  outline: none;
+  border: none;
+}
+
+.post form textarea {
+  resize: none;
+  font-size: 18px;
+  margin-top: 30px;
+  min-height: 100px;
+}
+
+form .options {
+  height: 57px;
+  border-radius: 7px;
+  padding: 0 15px;
+  margin: 15px 0;
+  border: 1px solid #b9b9b9;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+form .options p {
+  color: #595959;
+  font-size: 15px;
+  font-weight: 500;
+}
+
+form .options .list,
+audience header .arrow-back {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+form .options .list li {
+  list-style: none;
+  height: 60px;
+  width: 70px;
+  border-radius: 100%;
+  background: #f0f1f4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+form button {
+  height: 53px;
+  cursor: pointer;
+  font-size: 18px;
+  font-weight: 500;
+  color: #bcc0c4;
+  border-radius: 7px;
+  background: #e2e5e9;
+  margin-top: 10px;
+}
+
+form textarea:valid ~ button {
+  color: #ffffff;
+  background: #4599ff;
+}
+
+.privacy i {
+  margin-right: 5px;
+}
+
+.file-upload {
+  display: flex;
+  align-items: center;
+  color: red;
+}
+
+.file-upload-label {
+  border: 1px solid #ccc;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#file-upload {
+  display: none;
+}
+
+/* Privacy Overlay Styles */
+.privacy-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.privacy-options {
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.privacy-options h3 {
+  margin-bottom: 10px;
+}
+
+.privacy-options ul {
+  list-style: none;
+  padding: 0;
+}
+
+.privacy-options li {
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.privacy-options li i {
+  margin-right: 10px;
+}
+
+.hidden {
+  display: none;
+}

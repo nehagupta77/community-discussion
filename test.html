@@ -3,46 +3,28 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Post</title>
-    <!-- <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    /> -->
-    <link rel="stylesheet" href="./post.css">
+    <title>Test</title>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+      }
+      body button {
+        margin-top: 10px;
+        background-color: blue;
+        cursor: pointer;
+        height: 30px;
+        border: 0px;
+        border-radius: 5px;
+        color: white;
+      }
+    </style>
   </head>
   <body>
-    <div class="container">
-      <div class="wrapper">
-        <section class="post">
-          <header>Create Post</header>
-          <form action="#" method="post">
-            <div class="privacy" id="privacy">
-                <select name="privacy" id="privacy">
-                    <option value="friend">Public</option>
-                    <option value="friend">Friend</option>
-                    <option value="friend">Only me</option>
-                </select>
-            </div>
-            <textarea
-              id="postText"
-              placeholder="What's on your mind?"
-              required
-            ></textarea>
-            <div class="options">
-              <p>Add to Your Post</p>
-              <div class="file-upload">
-                <label for="postFile" class="file-upload-label"
-                  ><i class="fa-regular fa-gallery-thumbnails"></i> Upload
-                  File</label
-                >
-                <input id="postFile" type="file" />
-              </div>
-            </div>
-            <button type="button" id="submit">Post</button>
-          </form>
-        </section>
-      </div>
-    </div>
+    <h1>Post image</h1>
+    <input type="text" id="text1" placeholder="Kux Vi" required />
+    <input type="file" id="fileInput" />
+    <button id="postButton">Post</button>
 
     <script type="module">
       // Import the functions you need from the SDKs you need
@@ -80,13 +62,13 @@
       const storage = getStorage();
       const firestore = getFirestore();
 
-      const fileInput = document.getElementById("postFile");
-      const postButton = document.getElementById("submit");
+      const fileInput = document.getElementById("fileInput");
+      const postButton = document.getElementById("postButton");
 
       postButton.addEventListener("click", handleUpload);
 
       async function handleUpload() {
-        const postText = document.getElementById("postText").value;
+        const text1 = document.getElementById("text1").value; 
 
         const file = fileInput.files[0];
 
@@ -105,18 +87,14 @@
             },
             async () => {
               // Image uploaded successfully, get download URL
-              const downloadURL = await getDownloadURL(
-                uploadTask.snapshot.ref
-              );
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
 
               // Save download URL in Firestore
               await addDoc(collection(firestore, "posts"), {
-                text: postText,
+                text: text1,
                 imageUrl: downloadURL,
                 timestamp: new Date(),
               });
-
-              alert("Posted")
 
               console.log(
                 "Image uploaded and URL saved in Firestore:",
