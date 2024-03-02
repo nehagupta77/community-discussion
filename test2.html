@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fetch Data from Firestore</title>
+    <script type="module">
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+      import {
+        getFirestore,
+        collection,
+        getDocs,
+      } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+      // Your web app's Firebase configuration
+      const firebaseConfig = {
+        apiKey: "AIzaSyCWpArY3NEFkSuiXt57uJyBlj_jn-WuYV8",
+        authDomain: "auth-app-ed97f.firebaseapp.com",
+        databaseURL: "https://auth-app-ed97f-default-rtdb.firebaseio.com",
+        projectId: "auth-app-ed97f",
+        storageBucket: "auth-app-ed97f.appspot.com",
+        messagingSenderId: "751615460543",
+        appId: "1:751615460543:web:e174e76e7c35fa57fbb20a",
+        measurementId: "G-0PL8E1NB4S",
+      };
+
+      // Initialize Firebase
+      const app = initializeApp(firebaseConfig);
+      const analytics = getAnalytics(app);
+      const db = getFirestore(app);
+
+      async function getPosts() {
+        const postsCol = collection(db, "posts");
+        const postsSnapshot = await getDocs(postsCol);
+        const postsList = postsSnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+
+        // Example of how to display the posts in the HTML without using innerHTML
+        const postsContainer = document.getElementById("postsContainer");
+        postsList.forEach((post) => {
+          const postElement = document.createElement("div");
+
+          const title = document.createElement("h3");
+          title.textContent = post.text;
+          postElement.appendChild(title);
+
+          if (post.timestamp) {
+            const date = new Date(post.timestamp.seconds * 1000);
+            const dateString = date.toDateString();
+            const dateElement = document.createElement("p");
+            dateElement.textContent = dateString;
+            postElement.appendChild(dateElement);
+          }
+
+          if (post.imageUrl) {
+            const image = document.createElement("img");
+            image.src = post.imageUrl;
+            image.alt = "Post Image";
+            image.style = "max-width: 100%; height: auto;";
+            postElement.appendChild(image);
+          }
+
+          postsContainer.appendChild(postElement);
+        });
+      }
+
+      // Fetch and display posts
+      getPosts();
+    </script>
+  </head>
+  <body>
+    <h1>Posts</h1>
+    <div id="postsContainer">
+      <!-- Posts will be displayed here -->
+    </div>
+  </body>
+</html>

@@ -4,10 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard</title>
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
+        import {
+          getFirestore,
+          collection,
+          query,
+          orderBy,
+          getDocs,
+        } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+      
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+          apiKey: "AIzaSyCWpArY3NEFkSuiXt57uJyBlj_jn-WuYV8",
+          authDomain: "auth-app-ed97f.firebaseapp.com",
+          databaseURL: "https://auth-app-ed97f-default-rtdb.firebaseio.com",
+          projectId: "auth-app-ed97f",
+          storageBucket: "auth-app-ed97f.appspot.com",
+          messagingSenderId: "751615460543",
+          appId: "1:751615460543:web:e174e76e7c35fa57fbb20a",
+          measurementId: "G-0PL8E1NB4S",
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+      
+        async function getPosts() {
+          const postsCol = collection(db, "posts");
+          const q = query(postsCol, orderBy("timestamp", "desc")); 
+          const postsSnapshot = await getDocs(q);
+          const postsList = postsSnapshot.docs.map((doc) => ({
+            id: doc.id,
+            ...doc.data(),
+          })).filter(post => post.timestamp);
+      
+          // Example of how to display the posts in the HTML without using innerHTML
+          const postsContainer = document.getElementById("postsContainer");
+          postsContainer.innerHTML = ''; // Clear existing posts before appending new ones
+          postsList.forEach((post) => {
+            const postElement = document.createElement("div");
+      
+            const title = document.createElement("h3");
+            title.textContent = post.text;
+            const link = document.createElement("a");
+            link.href = `postDetail.html?postId=${post.id}`;
+            link.target = "_blank";
+            link.appendChild(title);
+            
+            postElement.appendChild(link);
+      
+            if (post.timestamp) {
+                    const date = post.timestamp.toDate(); // Convert timestamp to JavaScript Date object
+                    const dateString = date.toLocaleDateString("en-US");
+                    const timeString = date.toLocaleTimeString("en-US");
+                    const dateTimeElement = document.createElement("p");
+                    dateTimeElement.textContent = `Posted on: ${dateString} at ${timeString}`;
+                postElement.appendChild(dateTimeElement);
+            }
+      
+            if (post.imageUrl) {
+              const image = document.createElement("img");
+              image.src = post.imageUrl;
+              image.alt = "Post Image";
+              image.style = "max-width: 100%; height: auto;";
+              postElement.appendChild(image);
+            }
+            console.log(post);
+            postsContainer.appendChild(postElement);
+          });
+        }
+      
+        // Fetch and display posts
+        getPosts();
+      </script>
+      
     <link rel="stylesheet" href="dashboard.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
+
+       
+      <!-- Posts will be displayed here -->
+    </div>
+
     <div class="sidebar">
         <div class="logo"></div>
         <ul class="menu">
@@ -77,7 +160,7 @@
             </li>
 
             <li class="Logout">
-                <a href="#">
+                <a href="logout.html">
                     <i class="fas fa-sign-out-alt"></i>
                     <span>Logout</span>
                 </a>
@@ -105,6 +188,7 @@
                     <h2 class="title">Welcome to Community Discussion!</h2>
                        <p><small>Get Your Query Solutions.</small></p>
                 </div>
+                <div id="postsContainer"></div>
 <!-- 
                         <div class="post">
                                   <span class="title"><h2>Comment</h2></span>      
@@ -118,5 +202,15 @@
             </div>
         </div>
     </div>
+
+
+    <script>
+        var abc=localStorage.getItem("code");
+        if(abc=="secret"){
+
+        }else {
+           // window.location.href="login.html";
+        }
+    </script>
 </body>
 </html>

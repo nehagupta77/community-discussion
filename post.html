@@ -3,37 +3,13 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Post page</title>
-    <style>
-      body {
-        display: flex;
-        flex-direction: column;
-      }
-      body button {
-        margin-top: 10px;
-        background-color: blue;
-        cursor: pointer;
-        height: 30px;
-        border: 0px;
-        border-radius: 5px;
-        color: white;
-      }
-    </style>
-  </head>
-  <body>
-    <h1>Post image</h1>
-    <input type="text" id="text1" placeholder="What's on Your mind?" required />
-    <input type="file" id="fileInput" />
-    <button id="postButton">Post</button>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Post</title>
-    <!-- <link
+    <title>Post Page</title>
+    <link
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    /> -->
-    <link rel="stylesheet" href="./post.css">
+    />
+    <link rel="stylesheet" href="./post.css" />
+    <!-- <link rel="stylesheet" href="./comment.html"> -->
   </head>
   <body>
     <div class="container">
@@ -56,11 +32,10 @@
             <div class="options">
               <p>Add to Your Post</p>
               <div class="file-upload">
-                <label for="postFile" class="file-upload-label"
-                  ><i class="fa-regular fa-gallery-thumbnails"></i> Upload
-                  File</label
-                >
-                <input id="postFile" type="file" />
+                <label for="postFile" class="file-upload-label">
+                  <i class="fas fa-photo-video"></i> Upload File
+                </label>
+                <input id="postFile" type="file" style="display: none">
               </div>
             </div>
             <button type="button" id="submit">Post</button>
@@ -69,8 +44,12 @@
       </div>
     </div>
 
+    <section class="posts-display">
+      <header>Posts</header>
+      <div id="postsContainer"></div>
+    </section>
+
     <script type="module">
-      // Import the functions you need from the SDKs you need
       import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
       import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-analytics.js";
       import {
@@ -83,9 +62,12 @@
         getFirestore,
         addDoc,
         collection,
+        query,
+        orderBy,
+        onSnapshot,
       } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-      // Your web app's Firebase configuration
+      //Firebase configuration
       const firebaseConfig = {
         apiKey: "AIzaSyCWpArY3NEFkSuiXt57uJyBlj_jn-WuYV8",
         authDomain: "auth-app-ed97f.firebaseapp.com",
@@ -100,60 +82,51 @@
       // Initialize Firebase
       const app = initializeApp(firebaseConfig);
       const analytics = getAnalytics(app);
+      const storage = getStorage(app);
+      const firestore = getFirestore(app);
 
-      // Initialize Firebase Storage and Firestore
-      const storage = getStorage();
-      const firestore = getFirestore();
-
-      const fileInput = document.getElementById("postFile");
-      const postButton = document.getElementById("submit");
-      const postForm = document.getElementById("postForm");
-
-      postButton.addEventListener("click", handleUpload);
-
-      async function handleUpload() {
+      document.getElementById("submit").addEventListener("click", async () => {
         const postText = document.getElementById("postText").value;
         const privacySelect = document.getElementById("privacySelect");
         const selectedPrivacy =
           privacySelect.options[privacySelect.selectedIndex].value;
-
-        const file = fileInput.files[0];
+        const file = document.getElementById("postFile").files[0];
 
         if (file) {
-          // Upload image to Firebase Storage
-          const storageRef = ref(storage, "images/" + file.name);
+          const storageRef = ref(storage, `images/${file.name}`);
           const uploadTask = uploadBytesResumable(storageRef, file);
 
           uploadTask.on(
             "state_changed",
             (snapshot) => {
-              // Handle progress if needed
             },
             (error) => {
               console.error("Error uploading image: ", error);
             },
             async () => {
-              // Image uploaded successfully, get download URL
-              const downloadURL = await getDownloadURL(
-                uploadTask.snapshot.ref
-              );
-
-              // Save download URL and privacy in Firestore
+              const downloadURL = await getDownloadURL(uploadTask.snapshot.ref);
               await addDoc(collection(firestore, "posts"), {
                 text: postText,
                 imageUrl: downloadURL,
                 timestamp: new Date(),
                 privacy: selectedPrivacy,
               });
-
-              alert("Posted");
-              postForm.reset();
+              alert("Posted with an image");
+              document.getElementById("postForm").reset();
             }
           );
         } else {
-          console.error("No file selected");
+          // Handle posting without an image
+          await addDoc(collection(firestore, "posts"), {
+            text: postText,
+            timestamp: new Date(),
+            privacy: selectedPrivacy,
+          });
+          alert("Posted without an image");
+          window.location.href = 'dashboard.html';
+          document.getElementById("postForm").reset();
         }
-      }
+      });
     </script>
-</body>
+  </body>
 </html>

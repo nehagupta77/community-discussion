@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Post Detail</title>
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+      import {
+        getFirestore,
+        doc,
+        getDoc,
+        addDoc,
+        collection,
+        query,
+        where,
+        getDocs,
+      } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyCWpArY3NEFkSuiXt57uJyBlj_jn-WuYV8",
+        authDomain: "auth-app-ed97f.firebaseapp.com",
+        databaseURL: "https://auth-app-ed97f-default-rtdb.firebaseio.com",
+        projectId: "auth-app-ed97f",
+        storageBucket: "auth-app-ed97f.appspot.com",
+        messagingSenderId: "751615460543",
+        appId: "1:751615460543:web:e174e76e7c35fa57fbb20a",
+        measurementId: "G-0PL8E1NB4S",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const db = getFirestore(app);
+
+      async function getPostDetail() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get("postId");
+        if (!postId) {
+          document.getElementById("postDetail").textContent = "Post not found";
+          return;
+        }
+
+        const postRef = doc(db, "posts", postId);
+        const docSnap = await getDoc(postRef);
+
+        if (docSnap.exists()) {
+          const post = docSnap.data();
+          document.getElementById("postTitle").textContent =
+            post.text || "No title";
+
+          if (post.timestamp) {
+            const postDate = post.timestamp.toDate();
+            document.getElementById("postTimestamp").textContent =
+              postDate.toLocaleString();
+          }
+
+          if (post.imageUrl) {
+            const imageElement = document.createElement("img");
+            imageElement.src = post.imageUrl;
+            imageElement.style.maxWidth = "100%";
+            imageElement.alt = "Post Image";
+            document
+              .getElementById("postImageContainer")
+              .appendChild(imageElement);
+          }
+          fetchAndDisplayComments(postId);
+        } else {
+          document.getElementById("postDetail").textContent = "Post not found";
+        }
+      }
+
+      async function submitComment() {
+        const commentText = document.getElementById("commentText").value;
+        if (!commentText.trim()) {
+          alert("Please enter a comment.");
+          return;
+        }
+
+        const userId = localStorage.getItem("uid");
+        if (!userId) {
+          alert("You must be logged in to comment.");
+          return;
+        }
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const postId = urlParams.get("postId");
+        if (!postId) {
+          alert("Post ID not found.");
+          return;
+        }
+
+        const commentsRef = collection(db, "posts", postId, "comments");
+        const commentData = {
+          userId,
+          text: commentText,
+          timestamp: new Date(),
+        };
+
+        try {
+          await addDoc(commentsRef, commentData);
+          document.getElementById("commentText").value = "";
+          alert("Comment posted successfully.");
+          fetchAndDisplayComments(postId);
+        } catch (error) {
+          console.error("Error adding comment: ", error);
+          alert("Failed to post comment.");
+        }
+      }
+
+      async function fetchAndDisplayComments(postId) {
+        const commentsRef = collection(db, "posts", postId, "comments");
+        const q = query(commentsRef, where("userId", "!=", ""));
+        const querySnapshot = await getDocs(q);
+        const commentsContainer = document.getElementById("commentsContainer");
+        commentsContainer.innerHTML = "";
+
+        for (const commentDoc of querySnapshot.docs) {
+          const comment = commentDoc.data();
+            console.log("comment",comment)
+          const userRef = doc(db, "user", comment.userId);
+          const userSnap = await getDoc(userRef);       
+
+          let userEmail = "Anonymous";
+          let userDate = "No";
+          if (userSnap.exists()) {
+            const userData = userSnap.data();
+            console.log("userData",userData)
+            userEmail = userData.email || "Anonymous";
+            console.log(comment.timestamp)
+            const date = comment.timestamp.toDate();   
+            const dateString = date.toLocaleDateString("en-US");
+            const timeString = date.toLocaleTimeString("en-US");
+            const dateTimeElement = document.createElement("p");
+            userDate = `Posted on: ${dateString} at ${timeString}`;
+          }
+
+          const commentElement = document.createElement("p");
+          commentElement.textContent = `${comment.text} - ${userEmail} - ${userDate}`;
+          commentsContainer.appendChild(commentElement);
+        }
+      }
+
+      window.submitComment = submitComment;
+      getPostDetail();
+    </script>
+  </head>
+  <body>
+    <div id="postDetail">
+      <h2 id="postTitle"></h2>
+      <p id="postTimestamp"></p>
+      <div id="postImageContainer"></div>
+      <div id="commentForm">
+        <textarea
+          id="commentText"
+          placeholder="Write your comment here..."
+        ></textarea>
+        <button onclick="submitComment()">Post Comment</button>
+      </div>
+      <div id="commentsContainer"></div>
+    </div>
+  </body>
+</html>
