@@ -3,16 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Log Out Page</title>
-    <link rel="stylesheet" href="logout.css">
+    <title>LogOut</title>
 </head>
 <body>
-
-<div class="logout-container">
-    <h1>You have been logged out</h1>
-    <button id="loginPageButton">Go to Login Page</button>
-</div>
-
-<script src="logout.js"></script>
+    <script>
+        var a=localStorage.setItem("code","logout")
+        window.location.href="login.html";
+    </script>
 </body>
 </html>

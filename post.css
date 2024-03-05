@@ -112,6 +112,7 @@ form textarea:valid ~ button {
   display: flex;
   align-items: center;
   color: blue;
+  shape-image-threshold: initial;
 }
 
 .file-upload-label {

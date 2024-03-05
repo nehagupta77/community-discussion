@@ -67,6 +67,7 @@
             }
       
             if (post.imageUrl) {
+                console.log(post)
               const image = document.createElement("img");
               image.src = post.imageUrl;
               image.alt = "Post Image";
@@ -100,13 +101,13 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-
+<!-- 
             <li>
                 <a href="#">
                     <i class="fas fa-home"></i>
                     <span>Home</span>
                 </a>
-            </li>
+            </li> -->
 
             <li>
                 <a href="#">
@@ -137,13 +138,13 @@
     </div>
 </li>
 
-
+<!-- 
             <li>
                 <a href="#">
                     <i class="fas fa-comments"></i>
                     <span>Comment</span>
                 </a>
-            </li>
+            </li> -->
 
             <li>
                 <a href="#">
@@ -153,7 +154,7 @@
             </li>
 
             <li>
-                <a href="#">
+                <a href="about.html">
                     <i class="fas fa-info-circle"></i>
                     <span>About</span>
                 </a>
@@ -202,8 +203,11 @@
             </div>
         </div>
     </div>
+    
 
-
+    <!-- <input type="file" id="imageInput" accept="image/*">
+    <img id="displayImage" alt="Uploaded Image" style="display:none;"> -->
+    
     <script>
         var abc=localStorage.getItem("code");
         if(abc=="secret"){
@@ -211,6 +215,20 @@
         }else {
            // window.location.href="login.html";
         }
+
+
+//         document.getElementById('imageInput').addEventListener('change', function(event) {
+//   const file = event.target.files[0];
+//   const reader = new FileReader();
+//   reader.onload = function(e) {
+//     const img = document.getElementById('displayImage');
+//     img.src = e.target.result;
+//     img.classList.add('circle-image'); // Apply the CSS class for shaping
+//   };
+//   reader.readAsDataURL(file);
+// });
+
+
     </script>
 </body>
 </html>

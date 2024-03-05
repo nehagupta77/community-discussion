@@ -123,6 +123,7 @@ body{
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
+    flex-direction: column;
 }
 
 .main-title{
@@ -135,10 +136,11 @@ body{
     border-radius: 50px;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     transition: all 0.5s ease-in-out;
     font-weight: bold;
-    cursor: pointer;  
+    cursor: pointer; 
+   
 }
 
 .menu-item select{
@@ -151,21 +153,43 @@ body{
     color: white;
     cursor: pointer;
 }
-#postsContainer {
+ #postsContainer {
     display: flex;
     flex-direction: column;
-    gap: 20px; /* Creates consistent space between posts */
-}
-#postsContainer div {
+    gap: 20px; 
+} 
+ #postsContainer div {
     background-color: #ffffff;
-    border: 1px solid #e1e1e1; /* Adds a subtle border */
-    border-radius: 8px; /* Softens the corners */
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a light shadow for depth */
-    overflow: hidden; /* Ensures nothing spills outside the border-radius */
-    transition: transform 0.2s ease, box-shadow 0.2s ease; /* Smoothens transitions */
-}
+    border: 1px solid #e1e1e1; 
+    border-radius: 8px; 
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    overflow: hidden; 
+    transition: transform 0.2s ease, box-shadow 0.2s ease; 
+    max-height: 300px;
+    height: 100%;
+    width: 300px;
 
+    
 
+} 
+
+/* #postsContainer div{
+    width: 200px;
+    height: 200px; 
+    border-radius: 50%;
+    object-fit: cover; 
+    display: block; 
+    margin-top: 20px; 
+} */
+
+/* .circle-image {
+    border-radius: 50%;
+    width: 200px; 
+    height: 200px; 
+    object-fit: cover;
+    display: block; 
+  } */
+  
 
 
 
