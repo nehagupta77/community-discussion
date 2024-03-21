@@ -39,12 +39,16 @@ body {
   font-weight: 500;
 }
 
-.post form textarea,
-.post form button {
-  width: 100%;
-  outline: none;
+.post form textarea{
   border: none;
+  width: 99%;  
 }
+
+.post form button{
+  width: 100%;
+  border: 1px solid white;
+}
+
 
 .post form textarea {
   resize: none;
