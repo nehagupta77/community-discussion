@@ -46,7 +46,7 @@
       
           // Example of how to display the posts in the HTML without using innerHTML
           const postsContainer = document.getElementById("postsContainer");
-          postsContainer.innerHTML = ''; // Clear existing posts before appending new ones
+          postsContainer.innerHTML = ''; 
           postsList.forEach((post) => {
             const postElement = document.createElement("div");
       
@@ -80,6 +80,7 @@
             postsContainer.appendChild(postElement);
           });
         }
+        
       
         // Fetch and display posts
         getPosts();
