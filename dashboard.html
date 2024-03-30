@@ -47,7 +47,9 @@
           // Example of how to display the posts in the HTML without using innerHTML
           const postsContainer = document.getElementById("postsContainer");
           postsContainer.innerHTML = ''; 
-          postsList.forEach((post) => {
+          postsList.forEach((post) => { 
+          const card = document.createElement("div");
+           card.classList.add("card");
             const postElement = document.createElement("div");
       
             const title = document.createElement("h3");
@@ -56,8 +58,9 @@
             link.href = `postDetail.html?postId=${post.id}`;
             link.target = "_blank";
             link.appendChild(title);
+            card.appendChild(link);
             
-            postElement.appendChild(link);
+           // postElement.appendChild(link);
       
             if (post.timestamp) {
                     const date = post.timestamp.toDate(); // Convert timestamp to JavaScript Date object
@@ -73,11 +76,14 @@
               const image = document.createElement("img");
               image.src = post.imageUrl;
               image.alt = "Post Image";
+              image.classList.add("card-image");
+              card.appendChild(image);
               image.style = "max-width: 100%; height: auto;";
-              postElement.appendChild(image);
+             //postElement.appendChild(image);
             }
-            console.log(post);
-            postsContainer.appendChild(postElement);
+           //console.log(post);
+           // postsContainer.appendChild(postElement);
+               postsContainer.appendChild(card);
           });
         }
         

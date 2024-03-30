@@ -63,7 +63,9 @@ body {
     background-color: #f9f9f9;
     padding: 10px;
     border-left: 3px solid #008cba;
-    margin-bottom: 10px;
+    /* color: #666; */
+    font-size: 0.85em;
+    margin-bottom: 20px;
   }
   
   a {
