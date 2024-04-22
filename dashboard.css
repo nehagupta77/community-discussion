@@ -91,11 +91,11 @@ body{
     color: rgba(113, 99, 186, 255);
 }
 
-.user-info{
+/* .user-info{
     display: flex;
     align-items: center;
     gap: 1;
-}
+} */
 
 .search-box{
     background: rgb(237, 237, 237);
