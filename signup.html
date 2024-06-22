@@ -37,7 +37,7 @@
           </button>
         </form>
         <span class="alreadyAcc"
-          >Already account ? <a href="./index.html">Login</a></span
+          >Already have an account? <a href="./index.html">Login</a></span
         >
       </div>
     </section>
@@ -86,23 +86,46 @@
       const auth = getAuth(app);
       const db = getFirestore(app);
 
+      function validateEmail(email) {
+        // Email should start with an alphabet and can contain numbers, following the email format
+        const re = /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return re.test(String(email).toLowerCase());
+      }
+
+      function validatePassword(password) {
+        // Password must be at least 6 characters long
+        return password.length >= 6;
+      }
+
       document.getElementById("signUp").addEventListener("click", () => {
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
+        const email = document.getElementById("email").value.trim();
+        const password = document.getElementById("password").value.trim();
+
+        // Validation
+        if (!validateEmail(email)) {
+          alert("Email must start with an alphabet, and contain number too.");
+          return;
+        }
+
+        if (!validatePassword(password)) {
+          alert("Password must be at least 6 characters long.");
+          return;
+        }
+
         createUserWithEmailAndPassword(auth, email, password)
-          .then(async(userCredential) => {
+          .then(async (userCredential) => {
             const user = userCredential.user;
             const userId = user.uid;
             const userCollectionRef = collection(db, "user");
             const userDocRef = doc(userCollectionRef, userId);
-           await setDoc(userDocRef, { email: email, pass: password })
+            await setDoc(userDocRef, { email: email })
               .then((response) => {
-                console.log("user created");
+                console.log("User created");
               })
               .catch((error) => {
-                console.log("error", error.message);
+                console.log("Error", error.message);
               });
-            alert("Signup: " + user.email);
+            alert("Signup successful for: " + user.email);
           })
           .catch((error) => {
             const errorCode = error.code;

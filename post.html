@@ -18,10 +18,10 @@
           <header>Create Post</header>
           <form action="#" method="post" id="postForm">
             <div class="privacy" id="privacyDiv">
-              <select name="privacy" id="privacySelect">
+              <select name="privacy" id="privacySelect" required>
                 <option value="public">Public</option>
-                <option value="friend">Friend</option>
-                <option value="only-me">Only Me</option>
+                <!-- <option value="friend">Friend</option>
+                <option value="only-me">Only Me</option> -->
               </select>
             </div>
             <textarea
@@ -61,7 +61,7 @@
         onSnapshot,
       } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-      //Firebase configuration
+      // Firebase configuration
       const firebaseConfig = {
         apiKey: "AIzaSyCWpArY3NEFkSuiXt57uJyBlj_jn-WuYV8",
         authDomain: "auth-app-ed97f.firebaseapp.com",
@@ -80,11 +80,22 @@
       const firestore = getFirestore(app);
 
       document.getElementById("submit").addEventListener("click", async () => {
-        const postText = document.getElementById("postText").value;
+        const postText = document.getElementById("postText").value.trim();
         const privacySelect = document.getElementById("privacySelect");
         const selectedPrivacy =
           privacySelect.options[privacySelect.selectedIndex].value;
         const file = document.getElementById("postFile").files[0];
+
+        // Validation
+        if (postText === "") {
+          alert("Post text cannot be empty");
+          return;
+        }
+
+        if (selectedPrivacy === "") {
+          alert("Please select a privacy option");
+          return;
+        }
 
         if (file) {
           const storageRef = ref(storage, `images/${file.name}`);
@@ -93,6 +104,7 @@
           uploadTask.on(
             "state_changed",
             (snapshot) => {
+              // Optionally, you can show progress here
             },
             (error) => {
               console.error("Error uploading image: ", error);
@@ -104,7 +116,7 @@
                 imageUrl: downloadURL,
                 timestamp: new Date(),
                 privacy: selectedPrivacy,
-                userId:localStorage.getItem('uid')
+                userId: localStorage.getItem('uid') // Assuming you have user ID in localStorage
               });
               alert("Posted with an image");
               window.location.href = 'dashboard.html';
@@ -117,6 +129,7 @@
             text: postText,
             timestamp: new Date(),
             privacy: selectedPrivacy,
+            userId: localStorage.getItem('uid') // Assuming you have user ID in localStorage
           });
           alert("Posted without an image");
           window.location.href = 'dashboard.html';
