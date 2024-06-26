@@ -87,8 +87,8 @@
       const db = getFirestore(app);
 
       function validateEmail(email) {
-        // Email should start with an alphabet and can contain numbers, following the email format
-        const re = /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        // Email should start with an alphabet and can contain numbers.
+        const re = /^[a-zA-Z][a-zA-Z0-9._%+-]*@[a-zA-Z]+\.[a-zA-Z]{2,}$/;
         return re.test(String(email).toLowerCase());
       }
 
@@ -103,7 +103,7 @@
 
         // Validation
         if (!validateEmail(email)) {
-          alert("Email must start with an alphabet, and contain number too.");
+          alert("Please, provide valid Email.");
           return;
         }
 
